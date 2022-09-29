@@ -1,5 +1,5 @@
---Partie2
---Creation d'une vue
+--Partie1
+--Creation d'une vue mono table
 CREATE VIEW SuiviEvain as
 SELECT idSuivi, datesuivi, texte, idOperateur, idTicket FROM Suivi
 WHERE idOperateur = 4;
