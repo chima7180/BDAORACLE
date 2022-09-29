@@ -1,17 +1,19 @@
 --commande a exec
 SET serveroutput on
 
-
 --q1
-Select TABLE_NAME from user_tables;
-select * from user_tables;
-SELECT COLUMN_NAME, DATA_TYPE FROM USER_TAB_COLS WHERE TABLE_NAME = 'TICKET';
-SELECT * FROM USER_CONSTRAINTS;
+Select TABLE_NAME from user_tables; --obtenir liste des tables créées
+select * from user_tables;  --obtenir liste des tables créées
+SELECT COLUMN_NAME, DATA_TYPE FROM USER_TAB_COLS WHERE TABLE_NAME = 'TICKET'; --description de des colonnes
+SELECT * FROM USER_CONSTRAINTS; --nom et type des contraintes créées
 
 --q2
-SELECT count(*) FROM TICKET WHERE IDUTILISATEUR= 1;
-SELECT count(*) FROM TICKET WHERE STATUT='clos' and IDUTILISATEUR=1;
+SELECT count(*) FROM TICKET WHERE IDUTILISATEUR= 1; --le nombre total de tickets créés par l’utilisateur 1,
+SELECT count(*) FROM TICKET WHERE STATUT='clos' and IDUTILISATEUR=1; --le nombre de ses tickets clos (statut = ‘clos)
 SELECT IDTICKET, TITRE, NOMOPERATEUR FROM TICKET INNER JOIN OPERATEUR ON OPERATEUR.IDOPERATEUR=TICKET.IDOPERATEUR WHERE STATUT!='clos' and IDUTILISATEUR=1 order by DATETICKET DESC;
+-- . la liste de ses tickets encore ouverts (statut différent de ‘clos’) triée par ordre
+-- chronologique décroissant de création (uniquement idTicket et titre du
+-- ticket, ainsi que le nom de l’opérateur référent).
 
 --Manuel
 CREATE OR REPLACE PROCEDURE statsTicketsUtilisateur as
@@ -26,7 +28,6 @@ cursor manuel is SELECT IDTICKET, TITRE, NOMOPERATEUR  FROM TICKET
 INNER JOIN OPERATEUR ON OPERATEUR.IDOPERATEUR = TICKET.IDOPERATEUR
 WHERE IDUTILISATEUR = 1 AND STATUT != 'clos'
 ORDER BY DATETICKET DESC;
-
 
 BEGIN
 --Question 2
@@ -46,8 +47,6 @@ end loop;
 close manuel;
 END;
 /
-
-
 
 --Curseur semi-automatique
 for ticket in semi loop
@@ -70,7 +69,7 @@ end loop;
 
 EXECUTE statsTicketsUtilisateur;
 
---Q3
+--Q3 paramétrer l’identifiant de l’utilisateur pour lequel on veut les informations précédentes.
 CREATE OR REPLACE PROCEDURE statsTicketsUtilisateur(papy TICKET.IDUTILISATEUR%type) as
 
 nbTicket number;
@@ -92,7 +91,7 @@ END;
 
 EXECUTE statsTicketsUtilisateur(2);
 
---q4
+--q4 affichez le code source de vos programmes stockés
 SELECT * from USER_SOURCE;
 
 
