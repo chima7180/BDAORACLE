@@ -130,20 +130,31 @@ SELECT * FROM operateurs;
 
 --Partie3
 
---Q18
+--Q18 User1 donne à User2 le droit de travailler sur sa table Utilisateur avec
+-- les privilèges suivants : select, insert, update(prenomUtilisateur).
 GRANT select, insert, update on UTILISATEUR to GRT3543A;
 
---q19
+--q19 ] User2 fait une modification du prénom d’un Utilisateur dans la table
+-- user1.utilisateur. User2 et User1 vérifient le contenu de la table. Que se
+-- passe-t-il et pourquoi ? User2 fait un ‘commit’. User1 vérifie le contenu.
+-- l'User1 ne voit pas la modif car elle n'a pas été commit
 INSERT INTO PQM3570A.UTILISATEUR VALUES (111,'Lebron','James');
 SELECT * FROM PQM3570A.utilisateur;
 COMMIT;
 
 --q20
+-- User2 tente de supprimer une ligne dans la table User1.utilisateur. Que
+-- se passe-t-il et pourquoi ?
+-- suppression non faites car pas de droits de suppression en Q18
 DELETE FROM PQM3570A.utilisateur where idutilisateur= 110;
 
 --q21
+-- User1 et User2 font une modification de prénom d’utilisateur pour le même
+-- utilisateur. Que se passe-t-il et pourquoi ?
+-- la dernière modif commit s'appliquera
 UPDATE PQM3570A.UTILISATEUR set PRENOMUTILISATEUR= 'bite' where IDUTILISATEUR= 110;
 
 --Question 23
+--User1 supprime les privilèges donnés
 revoke select, insert, update ON UTILISATEUR from GRT3543A;
 
