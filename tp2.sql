@@ -1,5 +1,5 @@
 --Ex1
---Creattion de la procedure
+--Creation de la procedure
 CREATE OR REPLACE PROCEDURE insertionAttribuer(pidop ATTRIBUER.IDOPERATEUR%TYPE, pidticket ATTRIBUER.IDTICKET%type, vdatedebut ATTRIBUER.DATEDEBUT%type, vdatefin ATTRIBUER.DATEFIN%type) as
 
 --Declaration des erreurs
@@ -29,7 +29,6 @@ END;
 /
 EXECUTE insertionAttribuer(5,3,'31/5/2019','7/9/2020');
 
-
 --ex2
 --Creattion de la procedure
 CREATE OR REPLACE PROCEDURE insertionAttribuer(pidop ATTRIBUER.IDOPERATEUR%TYPE, pidticket ATTRIBUER.IDTICKET%type, vdatedebut ATTRIBUER.DATEDEBUT%type, vdatefin ATTRIBUER.DATEFIN%type) as
@@ -44,7 +43,6 @@ pragma exception_init ( idti_idop_existe,-2291 );
 
 BEGIN
 INSERT INTO ATTRIBUER VALUES (pidop, pidticket, vdatedebut, vdatefin);
-
 
 EXCEPTION
 --Date fin antérieure à dateDebut
@@ -82,7 +80,6 @@ SELECT dateticket into date_crea FROM TICKET WHERE idTicket = pidTicket;
 IF date_crea > pdatesuivi then raise date_pas_bon ;
 END IF;
 INSERT INTO SUIVI VALUES (pidSuivi, pdatesuivi, ptexte, pidOperateur, pidTicket);
-
 
 EXCEPTION
 when no_data_found then
