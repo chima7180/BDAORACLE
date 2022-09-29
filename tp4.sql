@@ -1,6 +1,14 @@
 set serveroutput on
 
---Q1
+-- Q1 Ecrire un trigger qui lors d’une insertion dans la table Ticket,
+--attribue automatiquement le ticket à l’opérateur référent pour le ticket
+--(insertion du tuple correspondant dans la table Attribuer, avec comme date
+--de début la date de réception du ticket, et la date de fin à null).
+-- Q2 Modifier ce trigger pour qu’il fonctionne également lors d’une mise à jour de la
+-- colonne idOperateur sur la table Ticket. Lorsque l’opérateur référent d’un ticket
+-- change, on ferme l’attribution du ticket pour l’ancien opérateur avec la date actuelle
+-- (sysdate) et on attribue le ticket au nouvel opérateur (date de début égale à la date
+-- actuelle)
 create or replace trigger insert_attribuer
 after insert or update on TICKET
 for each row
@@ -16,12 +24,6 @@ end;
 
 update ticket set idoperateur = 4 where idoperateur = 3 and idticket = 9;
 
-
--- --Q3 Modifier ce trigger pour qu’il fonctionne également lors d’une mise à jour de la
--- colonne idOperateur sur la table Ticket. Lorsque l’opérateur référent d’un ticket
--- change, on ferme l’attribution du ticket pour l’ancien opérateur avec la date actuelle
--- (sysdate) et on attribue le ticket au nouvel opérateur (date de début égale à la date
--- actuelle)
 
 alter table Utilisateur add nbTickets number;
 update Utilisateur U
@@ -50,14 +52,11 @@ end if;
 end;
 /
 
-
 --La compilation est OK
 insert into Ticket values (11,'12/9/2018','12/9/2018',null,'Demande d''installation de
 MongoDB dans les salles U3','Pourriez-vous installer MongoDB
 dans les salles','demande',2,'internet','créé',null,3,3);
 delete from Ticket where idticket = 11;
-
-
 
 --L'insertion ne fonctionne pas car on fait une recherche sur une ligne qu'on est entrain de travailler
 
@@ -77,6 +76,12 @@ if vdaterecep < :new.datesuivi then raise_application_error(-20003,'La date de s
 end if;
 end;
 /
+-- trigger en after ou before
+-- Pas de changement ici, même en trigger after l'insertion est annulée
+-- Donc: le raise_application_error empêche l'ordre sur lequel porte le trigger d'être réalisé
+-- que le trigger soit on trigger before ou en trigger after
+-- Attention cependant: il se peut que le code diffère en certains points lorsqu'on met le trigger
+-- en before ou en after (pas le cas ici)
 
 
 create or replace procedure insertionSuivi (pidsuivi suivi.idsuivi%TYPE, pdatesuivi suivi.DATESUIVI%TYPE, ptexte suivi.texte%TYPE, pidoperateur suivi.idoperateur%TYPE, pidticket suivi.idticket%TYPE) as
